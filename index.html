@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="ReGenHuman: Re-Generating Human Appearances for Realistic Full-Body Video Anonymization">
+  <meta name="keywords" content="video anonymization, diffusion models, privacy, video generation">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ReGenHuman: Full-Body Video Anonymization</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+
+  <style>
+    body {
+      font-family: 'Noto Sans', sans-serif;
+    }
+
+    .publication-title {
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .publication-authors a {
+      color: #363636;
+    }
+
+    .publication-authors a:hover {
+      color: #3273dc;
+    }
+
+    .publication-links .link-block {
+      margin: 0.25rem;
+    }
+
+    .hero .hero-body {
+      padding: 3rem 1.5rem;
+    }
+
+    .section {
+      padding: 3rem 1.5rem;
+    }
+
+    .teaser-image {
+      width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .method-image {
+      width: 100%;
+      border-radius: 4px;
+    }
+
+    .result-image {
+      width: 100%;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    .content h3 {
+      font-family: 'Google Sans', sans-serif;
+      margin-top: 1.5rem;
+    }
+
+    pre {
+      background: #f5f5f5;
+      border-radius: 6px;
+      padding: 1.25rem;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+
+    .tag-pill {
+      display: inline-block;
+      background: #3273dc;
+      color: white;
+      border-radius: 999px;
+      padding: 0.2em 0.75em;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin: 0.15rem;
+    }
+
+    .contribution-box {
+      border-left: 4px solid #3273dc;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      background: #f8faff;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .contribution-box strong {
+      color: #3273dc;
+    }
+
+    .navbar {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    footer {
+      background: #fafafa;
+    }
+
+    .is-divider {
+      border-top: 1px solid #e8e8e8;
+      margin: 2rem 0;
+    }
+
+    .eval-badge {
+      display: inline-block;
+      padding: 0.3em 0.7em;
+      border-radius: 4px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      margin: 0.15rem;
+    }
+
+    .eval-privacy { background: #ffe0e0; color: #b00; }
+    .eval-utility { background: #e0ffe0; color: #060; }
+    .eval-quality { background: #e0eeff; color: #006; }
+
+    .axis-card {
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 1.25rem;
+      height: 100%;
+    }
+
+    .axis-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+</nav>
+
+<!-- ==================== HERO ==================== -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            ReGenHuman: Re-Generating Human Appearances for Realistic Full-Body Video Anonymization
+          </h1>
+
+          <div class="is-size-5 publication-authors" style="margin-top: 1rem;">
+            <span class="author-block">
+              Anonymous Authors
+            </span>
+          </div>
+
+          <div class="is-size-6 publication-authors" style="margin-top: 0.5rem; color: #888;">
+            <em>NeurIPS 2026 Submission</em>
+          </div>
+
+          <!-- Link buttons -->
+          <div class="column has-text-centered" style="margin-top: 1.25rem;">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="ai ai-arxiv"></i></span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== TEASER ==================== -->
+<section class="hero" style="background: #f9f9f9; padding: 0;">
+  <div class="container is-max-desktop" style="padding: 2rem 1.5rem;">
+    <figure class="image">
+      <img src="static/images/teaser.jpg" alt="Teaser: comparison of ReGenHuman against baselines" class="teaser-image">
+    </figure>
+    <p class="has-text-centered" style="margin-top: 1rem; color: #555;">
+      Past full-body anonymization methods either produce anatomically unrealistic outputs or fail to maintain consistent identity across frames. <strong>ReGenHuman</strong> regenerates humans from identity-free structural cues, achieving realistic, temporally consistent anonymization that preserves downstream utility.
+    </p>
+  </div>
+</section>
+
+<!-- ==================== ABSTRACT ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Anonymizing human-centric video data is an understudied problem. Prior anonymization techniques either blur or redact pixels at the cost of realism and downstream utility, or generate frame-by-frame at the cost of temporal coherence. We introduce <strong>ReGenHuman</strong>, the first full-body video anonymization pipeline that is simultaneously realistic, temporally consistent, and anonymous by construction.
+          </p>
+          <p>
+            Contrary to past approaches which redact or edit the inputs directly, we propose a <em>regenerate, don't edit</em> paradigm. Our approach composites 2D pose, segmentation, and monocular depth into two complementary conditioning streams&mdash;<strong>StructAll</strong> and <strong>StructHuman</strong>&mdash;which are used to fine-tune a video-to-video diffusion backbone on in-the-wild human videos, synthesizing the human regions entirely from identity-free structural cues. We evaluate our model on privacy, quality, and utility, and show that ReGenHuman achieves the best tradeoff across all three axes against current baselines. We further show that our anonymized videos remain effective for downstream tasks, including video question answering.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== THREE AXES ==================== -->
+<section class="section" style="background: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">A Good Anonymizer Must Satisfy Three Axes</h2>
+    <div class="columns is-centered" style="margin-top: 1rem;">
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#128274;</div>
+          <h3 class="title is-5 eval-privacy" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Privacy</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            The output must not be re-identifiable by any means&mdash;including through face, body, clothing, and background cues.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#129504;</div>
+          <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#127916;</div>
+          <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== METHOD ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Method</h2>
+
+    <div class="content">
+      <p>
+        ReGenHuman replaces the prevailing <em>edit-or-redact</em> paradigm with a <em>regenerate, don't edit</em> formulation. The human region is entirely resynthesized from scratch, conditioned only on identity-free structural signals, so no original human pixel can reach the output.
+      </p>
+    </div>
+
+    <figure class="image" style="margin: 1.5rem 0;">
+      <img src="static/images/method.jpg" alt="ReGenHuman pipeline diagram" class="method-image">
+    </figure>
+
+    <div class="content" style="margin-top: 1.5rem;">
+      <p>
+        The pipeline has three steps:
+      </p>
+      <ol>
+        <li>
+          <strong>Conditioning extraction.</strong> Per-frame human masks (SAM3), 2D pose skeletons (DWPose), monocular depth (Video Depth Anything), and a clip-level text caption are extracted from the input video using frozen, off-the-shelf models.
+        </li>
+        <li>
+          <strong>Structural conditioning.</strong> The extracted signals are composited into one of two identity-free conditioning videos:
+          <ul style="margin-top: 0.5rem;">
+            <li><strong>StructAll</strong>&mdash;uses depth as the background, yielding a fully anonymized frame with no original pixels anywhere. Suitable when background context must also be protected.</li>
+            <li><strong>StructHuman</strong>&mdash;keeps the original background while graying out human regions, trading whole-frame anonymization for richer scene context. Suitable for settings where the background is not private (e.g., public streets).</li>
+          </ul>
+        </li>
+        <li>
+          <strong>Diffusion-based regeneration.</strong> A rank-32 LoRA trained on Wan2.1-VACE is fine-tuned on in-the-wild human videos to invert the structural conditioning back into a photorealistic clip. The DiT backbone and pretrained Context Adapter weights remain frozen.
+        </li>
+      </ol>
+      <p>
+        Because human-region pixels in the conditioning depend only on pose&mdash;never on the original appearance&mdash;privacy is enforced <em>architecturally</em> rather than empirically.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HOW IT WORKS (PIPELINE) ==================== -->
+<section class="section" id="pipeline" style="background: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">How It Works</h2>
+    <div class="content has-text-centered">
+      <p>
+        From an input clip we extract <strong>identity-free structural signals</strong>, composite them into
+        one of two conditioning streams, and regenerate the human region from scratch. No original human pixel
+        ever reaches the output.
+      </p>
+    </div>
+
+    <div class="pipe-flow">
+      <!-- Stage 1: input -->
+      <div class="pipe-stage">
+        <div class="pipe-stage-title">Input clip</div>
+        <div class="pipe-item">
+          <video class="pipe-vid" src="static/videos/pipeline/input.mp4" muted loop autoplay playsinline></video>
+        </div>
+      </div>
+
+      <div class="pipe-arrow">&#10142;</div>
+
+      <!-- Stage 2: structural signals -->
+      <div class="pipe-stage">
+        <div class="pipe-stage-title">Structural signals</div>
+        <div class="pipe-item">
+          <video class="pipe-vid" src="static/videos/pipeline/depth.mp4" muted loop autoplay playsinline></video>
+          <div class="pipe-vid-label">Monocular depth</div>
+        </div>
+        <div class="pipe-item">
+          <video class="pipe-vid" src="static/videos/pipeline/pose.mp4" muted loop autoplay playsinline></video>
+          <div class="pipe-vid-label">2D pose (DWPose)</div>
+        </div>
+      </div>
+
+      <div class="pipe-arrow">&#10142;</div>
+
+      <!-- Stage 3: conditioning streams -->
+      <div class="pipe-stage">
+        <div class="pipe-stage-title">Conditioning</div>
+        <div class="pipe-item">
+          <video class="pipe-vid" src="static/videos/pipeline/structall_cond.mp4" muted loop autoplay playsinline></video>
+          <div class="pipe-vid-label">StructAll (synthetic bg)</div>
+        </div>
+        <div class="pipe-item">
+          <video class="pipe-vid" src="static/videos/pipeline/structhuman_cond.mp4" muted loop autoplay playsinline></video>
+          <div class="pipe-vid-label">StructHuman (orig. bg)</div>
+        </div>
+      </div>
+
+      <div class="pipe-arrow">&#10142;</div>
+
+      <!-- Stage 4: regenerated output -->
+      <div class="pipe-stage">
+        <div class="pipe-stage-title">Regenerated output</div>
+        <div class="pipe-item">
+          <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structall_out.mp4" muted loop autoplay playsinline></video>
+          <div class="pipe-vid-label">Ours · StructAll</div>
+        </div>
+        <div class="pipe-item">
+          <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structhuman_out.mp4" muted loop autoplay playsinline></video>
+          <div class="pipe-vid-label">Ours · StructHuman</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="content has-text-centered" style="margin-top: 1rem; color: #888; font-size: 0.85rem;">
+      The diffusion backbone (Wan2.1-VACE + a rank-32 LoRA) inverts the conditioning streams back into a
+      realistic, temporally consistent clip. StructAll anonymizes the whole frame; StructHuman keeps the
+      original background.
+    </div>
+  </div>
+</section>
+
+<style>
+  .pipe-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+  .pipe-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .pipe-stage-title {
+    font-family: 'Google Sans', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #3273dc;
+    text-align: center;
+  }
+  .pipe-item { text-align: center; }
+  .pipe-vid {
+    width: 190px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 5px;
+    background: #000;
+    display: block;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+  .pipe-vid-ours { box-shadow: 0 0 0 2px #3273dc, 0 2px 6px rgba(0,0,0,0.2); }
+  .pipe-vid-label {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 0.2rem;
+  }
+  .pipe-arrow {
+    font-size: 1.7rem;
+    color: #c0c0c0;
+    line-height: 1;
+  }
+  @media (max-width: 760px) {
+    .pipe-flow { flex-direction: column; }
+    .pipe-arrow { transform: rotate(90deg); }
+  }
+</style>
+
+<!-- ==================== INTERACTIVE COMPARISON ==================== -->
+<section class="section" id="comparison">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Interactive Comparison</h2>
+    <div class="content has-text-centered">
+      <p>
+        Pick a method to compare against, then <strong>drag the slider</strong> across the clips.
+        Everything <strong>left</strong> of the divider is the comparison method; everything
+        <strong>right</strong> is <strong>our method</strong>. The slider moves across all four clips at once.
+      </p>
+    </div>
+
+    <!-- Controls -->
+    <div class="cmp-controls">
+      <div class="cmp-control-row">
+        <span class="cmp-control-label">Compare against</span>
+        <div class="buttons has-addons cmp-base-buttons"></div>
+      </div>
+      <div class="cmp-control-row">
+        <span class="cmp-control-label">Our method (right side)</span>
+        <div class="buttons has-addons cmp-ours-buttons"></div>
+      </div>
+    </div>
+
+    <!-- 2x2 grid of synced before/after clips -->
+    <div class="cmp-grid">
+      <div class="cmp-cell" data-clip="clip1">
+        <video class="cmp-ours"  muted loop autoplay playsinline preload="auto"></video>
+        <video class="cmp-base"  muted loop autoplay playsinline preload="auto"></video>
+        <div class="cmp-divider"><div class="cmp-handle"></div></div>
+        <span class="cmp-tag cmp-tag-left"></span>
+        <span class="cmp-tag cmp-tag-right"></span>
+      </div>
+      <div class="cmp-cell" data-clip="clip2">
+        <video class="cmp-ours"  muted loop autoplay playsinline preload="auto"></video>
+        <video class="cmp-base"  muted loop autoplay playsinline preload="auto"></video>
+        <div class="cmp-divider"><div class="cmp-handle"></div></div>
+        <span class="cmp-tag cmp-tag-left"></span>
+        <span class="cmp-tag cmp-tag-right"></span>
+      </div>
+      <div class="cmp-cell" data-clip="clip3">
+        <video class="cmp-ours"  muted loop autoplay playsinline preload="auto"></video>
+        <video class="cmp-base"  muted loop autoplay playsinline preload="auto"></video>
+        <div class="cmp-divider"><div class="cmp-handle"></div></div>
+        <span class="cmp-tag cmp-tag-left"></span>
+        <span class="cmp-tag cmp-tag-right"></span>
+      </div>
+      <div class="cmp-cell" data-clip="clip4">
+        <video class="cmp-ours"  muted loop autoplay playsinline preload="auto"></video>
+        <video class="cmp-base"  muted loop autoplay playsinline preload="auto"></video>
+        <div class="cmp-divider"><div class="cmp-handle"></div></div>
+        <span class="cmp-tag cmp-tag-left"></span>
+        <span class="cmp-tag cmp-tag-right"></span>
+      </div>
+    </div>
+
+    <div class="content has-text-centered" style="margin-top: 0.75rem; color: #888; font-size: 0.85rem;">
+      Four sequences from the HOIGen-1M test set. Drag anywhere on a clip to move the divider on all four.
+    </div>
+  </div>
+</section>
+
+<style>
+  .cmp-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .cmp-control-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+  .cmp-control-label {
+    font-weight: 600;
+    color: #555;
+    min-width: 9.5rem;
+    text-align: right;
+  }
+  .cmp-base-buttons .button,
+  .cmp-ours-buttons .button {
+    margin-bottom: 0;
+  }
+  .cmp-grid {
+    --pos: 50;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .cmp-cell {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 6px;
+    background: #000;
+    cursor: ew-resize;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+  }
+  .cmp-cell video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cmp-ours { z-index: 1; }
+  .cmp-base {
+    z-index: 2;
+    clip-path: inset(0 calc((100 - var(--pos)) * 1%) 0 0);
+  }
+  .cmp-divider {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: calc(var(--pos) * 1%);
+    width: 2px;
+    background: #fff;
+    transform: translateX(-1px);
+    box-shadow: 0 0 6px rgba(0,0,0,0.6);
+    z-index: 3;
+    pointer-events: none;
+  }
+  .cmp-handle {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cmp-handle::before {
+    content: "\2039\2003\203A";
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #3273dc;
+    line-height: 1;
+  }
+  .cmp-tag {
+    position: absolute;
+    bottom: 8px;
+    z-index: 4;
+    padding: 0.15em 0.55em;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.62);
+    border-radius: 4px;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .cmp-tag-left  { left: 8px; }
+  .cmp-tag-right { right: 8px; background: rgba(50,115,220,0.85); }
+  @media (max-width: 640px) {
+    .cmp-grid { grid-template-columns: 1fr; }
+    .cmp-control-label { min-width: auto; text-align: center; width: 100%; }
+  }
+</style>
+
+<script>
+(function () {
+  var COMPARISONS = [
+    { key: 'gt',      label: 'Ground Truth' },
+    { key: 'egoblur', label: 'EgoBlur' },
+    { key: 'fams',    label: 'Face Anonymization Made Simple' },
+    { key: 'dp2face', label: 'DeepPrivacy2 (Face)' },
+    { key: 'dp2body', label: 'DeepPrivacy2 (Body)' },
+    { key: 'fadm',    label: 'FADM' }
+  ];
+  var OURS = [
+    { key: 'ours_structall',   label: 'StructAll' },
+    { key: 'ours_structhuman', label: 'StructHuman' }
+  ];
+
+  var grid  = document.querySelector('.cmp-grid');
+  var cells = Array.prototype.slice.call(document.querySelectorAll('.cmp-cell'));
+  var baseBtnBox = document.querySelector('.cmp-base-buttons');
+  var oursBtnBox = document.querySelector('.cmp-ours-buttons');
+
+  var activeBase = COMPARISONS[0]; // default: Ground Truth
+  var activeOurs = OURS[0];        // default: StructAll
+
+  function srcFor(clip, key) { return 'static/videos/' + clip + '/' + key + '.mp4'; }
+
+  function refresh() {
+    cells.forEach(function (cell) {
+      var clip = cell.getAttribute('data-clip');
+      var base = cell.querySelector('.cmp-base');
+      var ours = cell.querySelector('.cmp-ours');
+      var newBase = srcFor(clip, activeBase.key);
+      var newOurs = srcFor(clip, activeOurs.key);
+      if (base.getAttribute('src') !== newBase) { base.src = newBase; base.load(); }
+      if (ours.getAttribute('src') !== newOurs) { ours.src = newOurs; ours.load(); }
+      cell.querySelector('.cmp-tag-left').textContent  = activeBase.label;
+      cell.querySelector('.cmp-tag-right').textContent = 'Ours · ' + activeOurs.label;
+      // Restart BOTH sides together once they are decodable, so the newly
+      // switched video does not start mid-way through the other one.
+      restartCell(cell);
+    });
+  }
+
+  function whenReady(v, cb) {
+    if (v.readyState >= 2) { cb(); return; }
+    v.addEventListener('loadeddata', function h() {
+      v.removeEventListener('loadeddata', h); cb();
+    });
+  }
+
+  // Seek both videos in a cell to 0 and play them in lockstep, but only
+  // once BOTH are ready to render their first frame.
+  function restartCell(cell) {
+    var vids = Array.prototype.slice.call(cell.querySelectorAll('video'));
+    var ready = 0;
+    vids.forEach(function (v) {
+      whenReady(v, function () {
+        ready += 1;
+        if (ready === vids.length) {
+          vids.forEach(function (x) {
+            try { x.currentTime = 0; } catch (e) {}
+            var p = x.play();
+            if (p && p.catch) { p.catch(function () {}); }
+          });
+        }
+      });
+    });
+  }
+
+  // Continuous drift correction: the "ours" video is the master clock and the
+  // comparison video is pinned to it (incl. across loop boundaries), so the two
+  // halves stay frame-aligned no matter when a method was switched.
+  function syncTick() {
+    cells.forEach(function (cell) {
+      var base = cell.querySelector('.cmp-base');
+      var ours = cell.querySelector('.cmp-ours');
+      if (base.readyState >= 2 && ours.readyState >= 2 &&
+          !base.seeking && !ours.seeking) {
+        if (Math.abs(base.currentTime - ours.currentTime) > 0.12) {
+          try { base.currentTime = ours.currentTime; } catch (e) {}
+        }
+      }
+    });
+    requestAnimationFrame(syncTick);
+  }
+  requestAnimationFrame(syncTick);
+
+  // Build control buttons.
+  function buildButtons(box, items, getActive, onPick) {
+    items.forEach(function (item) {
+      var b = document.createElement('button');
+      b.className = 'button is-small is-rounded';
+      b.textContent = item.label;
+      b.addEventListener('click', function () { onPick(item); paint(); });
+      b._item = item;
+      box.appendChild(b);
+    });
+    function paint() {
+      Array.prototype.forEach.call(box.children, function (b) {
+        var on = b._item.key === getActive().key;
+        b.classList.toggle('is-link', on);
+        b.classList.toggle('is-selected', on);
+      });
+    }
+    paint();
+  }
+  buildButtons(baseBtnBox, COMPARISONS, function () { return activeBase; },
+    function (it) { activeBase = it; refresh(); });
+  buildButtons(oursBtnBox, OURS, function () { return activeOurs; },
+    function (it) { activeOurs = it; refresh(); });
+
+  // Drag to move the shared divider across all clips.
+  var dragging = false, rect = null;
+  function setFromX(clientX) {
+    var x = (clientX - rect.left) / rect.width;
+    x = Math.max(0, Math.min(1, x));
+    grid.style.setProperty('--pos', (x * 100).toFixed(2));
+  }
+  cells.forEach(function (cell) {
+    cell.addEventListener('pointerdown', function (e) {
+      dragging = true;
+      rect = cell.getBoundingClientRect();
+      setFromX(e.clientX);
+      e.preventDefault();
+    });
+  });
+  window.addEventListener('pointermove', function (e) {
+    if (dragging) setFromX(e.clientX);
+  });
+  window.addEventListener('pointerup', function () { dragging = false; });
+
+  refresh();
+})();
+</script>
+
+<!-- ==================== RESULTS ==================== -->
+<section class="section" style="background: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Full Method Comparison</h2>
+    <div class="content has-text-centered">
+      <p>
+        A side-by-side stack of all eight methods on four sequences, playing in sync.
+      </p>
+    </div>
+
+    <figure class="image" style="margin: 1.5rem 0;">
+      <img src="static/images/collage.jpg" alt="Qualitative comparison against baselines" class="result-image">
+    </figure>
+
+    <div class="content has-text-centered" style="margin-top: 0.5rem; color: #555; font-size: 0.9rem;">
+      Qualitative comparison on 4 randomly sampled examples from the HOIGen-1M test set. EgoBlur, Face Anonymization Made Simple (FAMS), and DeepPrivacy2 (Face) do not anonymize the body. DeepPrivacy2 (Body) and FADM are temporally inconsistent. ReGenHuman produces high-quality, temporally consistent anonymizations for both StructHuman and StructAll modes.
+    </div>
+  </div>
+</section>
+
+<!-- ==================== CONTRIBUTIONS ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Contributions</h2>
+    <div class="content" style="margin-top: 1rem;">
+
+      <div class="contribution-box">
+        <strong>First realistic, temporally consistent full-body video anonymization pipeline.</strong>
+        <p style="margin-top: 0.4rem; margin-bottom: 0;">By jointly denoising full clips conditioned on structural overlays, ReGenHuman produces anonymized video that is temporally stable, anatomically coherent, and visually realistic.</p>
+      </div>
+
+      <div class="contribution-box">
+        <strong>A new paradigm: Regenerate, Don't Edit.</strong>
+        <p style="margin-top: 0.4rem; margin-bottom: 0;">Unlike all prior methods that edit, redact, or perturb original pixels, we regenerate the human region from identity-free structural inputs (StructAll and StructHuman). This carries an <em>architectural</em> privacy guarantee: no original human pixel can reach the output.</p>
+      </div>
+
+      <div class="contribution-box">
+        <strong>A unified three-axis evaluation protocol.</strong>
+        <p style="margin-top: 0.4rem; margin-bottom: 0;">We propose a comprehensive benchmark jointly measuring <span class="eval-badge eval-privacy">Privacy</span> (identity, attribute, background-text leakage, adversarial body re-identification), <span class="eval-badge eval-utility">Utility</span> (action recognition, captioning, HOI preservation), and <span class="eval-badge eval-quality">Quality</span> (VBench- and VBench-2.0-aligned temporal consistency, human anatomy, and aesthetics).</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ==================== BIBTEX ==================== -->
+<section class="section" id="BibTeX" style="background: #f9f9f9;">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code>@article{regenthuman2026,
+  title     = {ReGenHuman: Re-Generating Human Appearances for Realistic
+               Full-Body Video Anonymization},
+  author    = {Anonymous Authors},
+  journal   = {Advances in Neural Information Processing Systems},
+  year      = {2026},
+}</code></pre>
+  </div>
+</section>
+
+<!-- ==================== FOOTER ==================== -->
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content has-text-centered" style="font-size: 0.85rem; color: #888;">
+          <p>
+            Website template adapted from <a href="https://nerfies.github.io" style="color: #888;">Nerfies</a>,
+            licensed under <a href="http://creativecommons.org/licenses/by-sa/4.0/" style="color: #888;">CC BY-SA 4.0</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Navbar burger toggle
+  document.querySelectorAll('.navbar-burger').forEach(burger => {
+    burger.addEventListener('click', () => {
+      const target = document.getElementById(burger.dataset.target);
+      burger.classList.toggle('is-active');
+      if (target) target.classList.toggle('is-active');
+    });
+  });
+</script>
+
+</body>
+</html>
