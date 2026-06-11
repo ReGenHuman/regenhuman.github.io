@@ -165,16 +165,13 @@
           </h1>
 
           <p class="hero-tagline">
-            Prior methods anonymize <em>frame by frame</em>&mdash;flickering, identity-drifting, and
-            unrealistic. ReGenHuman is the first to <strong>regenerate the whole human in a single
-            temporally consistent pass</strong>, making it realistic, downstream-usable, and anonymous
-            by construction.
+            Prior anonymization methods either redact or conduct <em>frame by frame</em> edits, resulting in unrealistic results. ReGenHuman is the first anonymization method that results in <strong>temporally consistent videos that are realistic and anonymous by construction</strong>.
           </p>
 
           <div class="is-size-5 publication-authors" style="margin-top: 1rem;">
             <span class="author-block">
               Adam Sun<sup>*</sup>,&nbsp; Eshaan Barkataki,&nbsp; Arnold Milstein,&nbsp;
-              Gordon Wetzstein,&nbsp; Ehsan Adeli
+              Gordon Wetzstein,&nbsp; Ehsan Adeli<sup>*</sup>
             </span>
           </div>
 
@@ -255,7 +252,7 @@
     <p class="fig1-cap">
       The same clip, anonymized eight ways. Pixel and face methods leave the body identifiable;
       prior full-body methods flicker and distort frame to frame.
-      <strong>Ours</strong> (outlined) stays realistic and temporally consistent. Note: We provide two versions of our model – <strong>StructHuman</strong>, which preserves the background, and <strong>StructAll</strong>, which anonymizes it.
+      <strong>Ours</strong> stays realistic and consistent with the original video. We provide two versions of our model – <strong>StructHuman</strong>, which preserves the background and text, and <strong>StructAll</strong>, which anonymizes it.
     </p>
   </div>
 </section>
@@ -331,7 +328,7 @@
           <div class="axis-icon">&#128274;</div>
           <h3 class="title is-5 eval-privacy" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Privacy</h3>
           <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            The output must not be re-identifiable by any means&mdash;including through face, body, clothing, and background cues.
+            The video must be fully private and not be re-identifiable.
           </p>
         </div>
       </div>
@@ -340,7 +337,7 @@
           <div class="axis-icon">&#127916;</div>
           <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
           <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
+            The video must be realistic – it should be temporally and geometrically consistent.
           </p>
         </div>
       </div>
@@ -349,7 +346,7 @@
           <div class="axis-icon">&#129504;</div>
           <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
           <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
+            The video must remain recognizable for downstream tasks and be contextually consistent with the original input video.
           </p>
         </div>
       </div>
@@ -366,23 +363,16 @@
         <div class="content has-text-justified">
           <p>
             Human-centric video is everywhere&mdash;and almost always identifiable. To share or train on
-            it safely, we need to anonymize the people in it. But the standard playbook is a dead end:
-            <em>blurring and blacking out</em> people destroys realism and makes the footage useless
-            downstream, while <em>generating each frame independently</em> produces flickering, drifting
-            humans that no longer look real.
+            it safely, we need to anonymize the people in it. However,
+            <em>blurring and redacting</em> detected humans destroys realism and negatively effects
+            downstream usability, while existing generative anonymization methods generate frame-by-frame, resulting in temporal flickering and identity drift.
           </p>
           <p>
-            Our insight is simple: <strong>regenerate, don't edit</strong>. Instead of hiding the original
-            person, we throw their pixels away entirely and <strong>rebuild a brand-new human</strong> from
+            Our insight is simple: <strong>regenerate, don't edit</strong>. Instead of hiding or editing the original video directly (which compromises privacy), we throw their pixels away entirely and <strong>regenerate the human pixels</strong> from
             identity-free structural cues&mdash;pose, depth, and segmentation&mdash;using a video diffusion
             model that denoises the whole clip at once. Because no original human pixel ever reaches the
             output, privacy is guaranteed <em>by construction</em>, and because the clip is generated jointly,
             the result is <strong>temporally consistent</strong>.
-          </p>
-          <p>
-            The payoff: <strong>ReGenHuman is the first full-body video anonymizer that is realistic,
-            temporally consistent, and anonymous all at once</strong>&mdash;and it is the only method that
-            wins on privacy, quality, <em>and</em> downstream utility together.
           </p>
         </div>
       </div>
@@ -398,7 +388,7 @@
       <p>
         We composite identity-free <strong>pose, depth, and segmentation</strong> into a structural
         conditioning video, then a video diffusion model (Wan2.1-VACE + a LoRA) regenerates the human
-        from it&mdash;jointly across the whole clip, so the output is temporally consistent.
+        from it jointly across the whole clip, so the output is temporally consistent.
       </p>
     </div>
 
@@ -409,7 +399,7 @@
     <div class="hiw-pair">
       <div class="hiw-item">
         <video src="static/videos/pipeline/structall_cond.mp4" muted loop autoplay playsinline></video>
-        <div class="hiw-label">Structural conditioning</div>
+        <div class="hiw-label">Fully anonymous structural conditioning (StructAll)</div>
       </div>
       <div class="hiw-arrow">&#10142;</div>
       <div class="hiw-item">
@@ -758,8 +748,7 @@
     <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
     <div class="content has-text-centered">
       <p>
-        <strong>Best on all three axes.</strong> ReGenHuman (&#9733;) is the only method in the
-        top-right corner&mdash;strongest anonymization, best generation quality, highest downstream utility.
+        ReGenHuman (&#9733;) shwos the strongest anonymization and best generation quality, while maintaining good downstream utility.
       </p>
     </div>
 
@@ -893,9 +882,7 @@
     </div>
     <p class="table-note">
       Zero-shot Video Question Answering accuracy with a frozen Qwen3-VL-8B on anonymized clips.
-      &Delta; is relative to the un-anonymized upper bound (top row), which is excluded from the ranking.
-      Unlike redaction baselines that collapse on body-centric content, our regenerated humans keep VQA
-      utility close to the upper bound while being the only method that is anonymous by construction.
+      &Delta; is relative to the un-anonymized upper bound (top row).
     </p>
   </div>
 </section>
