@@ -173,34 +173,32 @@
 
           <div class="is-size-5 publication-authors" style="margin-top: 1rem;">
             <span class="author-block">
-              Anonymous Authors
+              Adam Sun<sup>*</sup>,&nbsp; Eshaan Barkataki,&nbsp; Arnold Milstein,&nbsp;
+              Gordon Wetzstein,&nbsp; Ehsan Adeli
             </span>
           </div>
 
-          <div class="is-size-6 publication-authors" style="margin-top: 0.5rem; color: #888;">
-            <em>NeurIPS 2026 Submission</em>
+          <div class="is-size-6 publication-authors" style="margin-top: 0.5rem; color: #555;">
+            Stanford University
+          </div>
+          <div class="is-size-7 publication-authors" style="margin-top: 0.25rem; color: #999;">
+            <sup>*</sup>Corresponding author
           </div>
 
           <!-- Link buttons -->
           <div class="column has-text-centered" style="margin-top: 1.25rem;">
             <div class="publication-links">
               <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <button class="button is-normal is-rounded is-dark" disabled>
                   <span class="icon"><i class="ai ai-arxiv"></i></span>
                   <span>arXiv</span>
-                </a>
+                </button>
               </span>
               <span class="link-block">
-                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                <button class="button is-normal is-rounded is-dark" disabled>
                   <span class="icon"><i class="fab fa-github"></i></span>
                   <span>Code</span>
-                </a>
+                </button>
               </span>
             </div>
           </div>
@@ -213,55 +211,89 @@
 
 <!-- ==================== TEASER (FIGURE 1) ==================== -->
 <section class="hero" style="background: #f9f9f9; padding: 0;">
-  <div class="container is-max-desktop" style="padding: 2rem 1.5rem;">
-    <div class="fig1-layout">
-      <!-- Left: synced collage of all methods -->
-      <div class="fig1-video">
-        <video src="static/videos/figure1.mp4" muted loop autoplay playsinline preload="auto"
-               class="teaser-video"></video>
-        <p class="fig1-cap">
-          All eight methods on the same clip, in sync. Pixel and face baselines leave the body
-          identifiable; prior full-body methods flicker frame to frame.
-          <strong>Ours</strong> (green) is realistic and temporally consistent.
-        </p>
+  <div class="fig1-wrap">
+    <div class="fig1-collage">
+      <div class="fig1-cell">
+        <video src="static/videos/clip3/gt.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">Original</div>
       </div>
-      <!-- Right: three-axis tradeoff plot -->
-      <div class="fig1-plot">
-        <figure class="image">
-          <img src="static/images/comparison.png" alt="Privacy-quality-utility tradeoff: ReGenHuman vs. baselines" style="width:100%; border-radius:6px;">
-        </figure>
-        <p class="fig1-cap">
-          <strong>Best on all three axes.</strong> Privacy, quality, and utility&mdash;ReGenHuman
-          (&#9733;) is the only method in the top-right corner.
-        </p>
+      <div class="fig1-cell">
+        <video src="static/videos/clip3/egoblur.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">EgoBlur</div>
+      </div>
+      <div class="fig1-cell">
+        <video src="static/videos/clip3/fams.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">FAMS</div>
+      </div>
+      <div class="fig1-cell">
+        <video src="static/videos/clip3/dp2face.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">DeepPrivacy2 (face)</div>
+      </div>
+      <div class="fig1-cell">
+        <video src="static/videos/clip3/dp2body.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">DeepPrivacy2 (body)</div>
+      </div>
+      <div class="fig1-cell">
+        <video src="static/videos/clip3/fadm.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">FADM</div>
+      </div>
+      <div class="fig1-cell is-ours">
+        <video src="static/videos/clip3/ours_structhuman.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">Ours &middot; StructHuman</div>
+      </div>
+      <div class="fig1-cell is-ours">
+        <video src="static/videos/clip3/ours_structall.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <div class="fig1-label">Ours &middot; StructAll</div>
       </div>
     </div>
+    <p class="fig1-cap">
+      The same clip, anonymized eight ways. Pixel and face methods leave the body identifiable;
+      prior full-body methods flicker and distort frame to frame.
+      <strong>Ours</strong> (outlined) stays realistic and temporally consistent.
+    </p>
   </div>
 </section>
 
 <style>
-  .fig1-layout {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
+  .fig1-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
   }
-  .fig1-video { flex: 3.25 1 0; min-width: 0; }
-  .fig1-plot  { flex: 1.5 1 0; min-width: 0; }
-  .teaser-video {
+  .fig1-collage {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .fig1-cell video {
     width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
     display: block;
     border-radius: 8px;
     background: #000;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
   }
+  .fig1-cell.is-ours video {
+    box-shadow: 0 0 0 3px #3273dc, 0 3px 10px rgba(0, 0, 0, 0.22);
+  }
+  .fig1-label {
+    margin-top: 0.45rem;
+    text-align: center;
+    font-size: 0.82rem;
+    color: #666;
+  }
+  .fig1-cell.is-ours .fig1-label { color: #3273dc; font-weight: 600; }
   .fig1-cap {
-    margin-top: 0.75rem;
+    max-width: 820px;
+    margin: 1.5rem auto 0;
+    text-align: center;
     color: #555;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    font-size: 0.95rem;
+    line-height: 1.55;
   }
-  @media (max-width: 860px) {
-    .fig1-layout { flex-direction: column; gap: 1.5rem; }
+  @media (max-width: 760px) {
+    .fig1-collage { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 
@@ -573,9 +605,19 @@
     <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
     <div class="content has-text-centered">
       <p>
-        ReGenHuman is evaluated on the three axes a good anonymizer must satisfy. In every table,
-        <span class="hl-best">orange</span> marks the best and <span class="hl-snd">blue</span> the
-        second-best per column.
+        <strong>Best on all three axes.</strong> ReGenHuman (&#9733;) is the only method in the
+        top-right corner&mdash;strongest anonymization, best generation quality, highest downstream utility.
+      </p>
+    </div>
+
+    <figure class="image" style="max-width:640px; margin:0.5rem auto 1.5rem;">
+      <img src="static/images/comparison.png" alt="Privacy-quality-utility tradeoff: ReGenHuman vs. baselines" style="width:100%; border-radius:6px;">
+    </figure>
+
+    <div class="content has-text-centered">
+      <p style="color:#666; font-size:0.95rem;">
+        Per-axis numbers below. In every table, <span class="hl-best">orange</span> marks the best and
+        <span class="hl-snd">blue</span> the second-best per column.
       </p>
     </div>
 
@@ -843,13 +885,27 @@
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
+        <h2 class="title is-3">The Idea</h2>
         <div class="content has-text-justified">
           <p>
-            Anonymizing human-centric video data is an understudied problem. Prior anonymization techniques either blur or redact pixels at the cost of realism and downstream utility, or generate frame-by-frame at the cost of temporal coherence. We introduce <strong>ReGenHuman</strong>, <strong>the first full-body video anonymization pipeline that is simultaneously realistic, temporally consistent, and anonymous by construction</strong>.
+            Human-centric video is everywhere&mdash;and almost always identifiable. To share or train on
+            it safely, we need to anonymize the people in it. But the standard playbook is a dead end:
+            <em>blurring and blacking out</em> people destroys realism and makes the footage useless
+            downstream, while <em>generating each frame independently</em> produces flickering, drifting
+            humans that no longer look real.
           </p>
           <p>
-            Contrary to past approaches which redact or edit the inputs directly, we propose a <em>regenerate, don't edit</em> paradigm. Our approach composites 2D pose, segmentation, and monocular depth into two complementary conditioning streams&mdash;<strong>StructAll</strong> and <strong>StructHuman</strong>&mdash;which are used to fine-tune a video-to-video diffusion backbone on in-the-wild human videos, synthesizing the human regions entirely from identity-free structural cues. We evaluate our model on privacy, quality, and utility, and show that ReGenHuman achieves the best tradeoff across all three axes against current baselines. We further show that our anonymized videos remain effective for downstream tasks, including video question answering.
+            Our insight is simple: <strong>regenerate, don't edit</strong>. Instead of hiding the original
+            person, we throw their pixels away entirely and <strong>rebuild a brand-new human</strong> from
+            identity-free structural cues&mdash;pose, depth, and segmentation&mdash;using a video diffusion
+            model that denoises the whole clip at once. Because no original human pixel ever reaches the
+            output, privacy is guaranteed <em>by construction</em>, and because the clip is generated jointly,
+            the result is <strong>temporally consistent</strong>.
+          </p>
+          <p>
+            The payoff: <strong>ReGenHuman is the first full-body video anonymizer that is realistic,
+            temporally consistent, and anonymous all at once</strong>&mdash;and it is the only method that
+            wins on privacy, quality, <em>and</em> downstream utility together.
           </p>
         </div>
       </div>
@@ -889,7 +945,8 @@
     <pre><code>@article{regenthuman2026,
   title     = {ReGenHuman: Re-Generating Human Appearances for Realistic
                Full-Body Video Anonymization},
-  author    = {Anonymous Authors},
+  author    = {Sun, Adam and Barkataki, Eshaan and Milstein, Arnold
+               and Wetzstein, Gordon and Adeli, Ehsan},
   journal   = {Advances in Neural Information Processing Systems},
   year      = {2026},
 }</code></pre>
