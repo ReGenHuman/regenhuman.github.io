@@ -5,7 +5,7 @@
   <meta name="description" content="ReGenHuman: Re-Generating Human Appearances for Realistic Full-Body Video Anonymization">
   <meta name="keywords" content="video anonymization, diffusion models, privacy, video generation">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ReGenHuman: Full-Body Video Anonymization</title>
+  <title>ReGenHuman: The First Temporally Consistent Full-Body Video Anonymizer</title>
 
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
@@ -36,6 +36,29 @@
     .hero .hero-body {
       padding: 3rem 1.5rem;
     }
+
+    .first-pill {
+      display: inline-block;
+      background: linear-gradient(90deg, #3273dc, #5d3fd3);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0.45em 1.15em;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 3px 12px rgba(50, 115, 220, 0.3);
+    }
+    .first-pill strong { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
+
+    .hero-tagline {
+      max-width: 720px;
+      margin: 1rem auto 0;
+      font-size: 1.1rem;
+      line-height: 1.55;
+      color: #444;
+    }
+    .hero-tagline strong { color: #3273dc; }
 
     .section {
       padding: 3rem 1.5rem;
@@ -151,9 +174,21 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
+          <div class="first-pill">
+            <span class="icon" style="margin-right:0.4em;"><i class="fas fa-star"></i></span>
+            The first <strong>temporally consistent</strong> full-body video anonymizer
+          </div>
+
           <h1 class="title is-1 publication-title">
             ReGenHuman: Re-Generating Human Appearances for Realistic Full-Body Video Anonymization
           </h1>
+
+          <p class="hero-tagline">
+            Prior methods anonymize <em>frame by frame</em>&mdash;flickering, identity-drifting, and
+            unrealistic. ReGenHuman is the first to <strong>regenerate the whole human in a single
+            temporally consistent pass</strong>, making it realistic, downstream-usable, and anonymous
+            by construction.
+          </p>
 
           <div class="is-size-5 publication-authors" style="margin-top: 1rem;">
             <span class="author-block">
@@ -202,7 +237,11 @@
       <img src="static/images/teaser.jpg" alt="Teaser: comparison of ReGenHuman against baselines" class="teaser-image">
     </figure>
     <p class="has-text-centered" style="margin-top: 1rem; color: #555;">
-      Past full-body anonymization methods either produce anatomically unrealistic outputs or fail to maintain consistent identity across frames. <strong>ReGenHuman</strong> regenerates humans from identity-free structural cues, achieving realistic, temporally consistent anonymization that preserves downstream utility.
+      Every prior full-body anonymizer works frame by frame&mdash;producing anatomically unrealistic
+      outputs that flicker and drift in identity across time. <strong>ReGenHuman is the first
+      temporally consistent full-body video anonymizer</strong>: it regenerates humans from identity-free
+      structural cues in a single coherent pass, staying realistic across frames while preserving
+      downstream utility.
     </p>
   </div>
 </section>
@@ -215,7 +254,7 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            Anonymizing human-centric video data is an understudied problem. Prior anonymization techniques either blur or redact pixels at the cost of realism and downstream utility, or generate frame-by-frame at the cost of temporal coherence. We introduce <strong>ReGenHuman</strong>, the first full-body video anonymization pipeline that is simultaneously realistic, temporally consistent, and anonymous by construction.
+            Anonymizing human-centric video data is an understudied problem. Prior anonymization techniques either blur or redact pixels at the cost of realism and downstream utility, or generate frame-by-frame at the cost of temporal coherence. We introduce <strong>ReGenHuman</strong>, <strong>the first full-body video anonymization pipeline that is simultaneously realistic, temporally consistent, and anonymous by construction</strong>.
           </p>
           <p>
             Contrary to past approaches which redact or edit the inputs directly, we propose a <em>regenerate, don't edit</em> paradigm. Our approach composites 2D pose, segmentation, and monocular depth into two complementary conditioning streams&mdash;<strong>StructAll</strong> and <strong>StructHuman</strong>&mdash;which are used to fine-tune a video-to-video diffusion backbone on in-the-wild human videos, synthesizing the human regions entirely from identity-free structural cues. We evaluate our model on privacy, quality, and utility, and show that ReGenHuman achieves the best tradeoff across all three axes against current baselines. We further show that our anonymized videos remain effective for downstream tasks, including video question answering.
