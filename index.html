@@ -37,20 +37,6 @@
       padding: 3rem 1.5rem;
     }
 
-    .first-pill {
-      display: inline-block;
-      background: linear-gradient(90deg, #3273dc, #5d3fd3);
-      color: #fff;
-      border-radius: 999px;
-      padding: 0.45em 1.15em;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 3px 12px rgba(50, 115, 220, 0.3);
-    }
-    .first-pill strong { color: #fff; text-decoration: underline; text-underline-offset: 2px; }
-
     .hero-tagline {
       max-width: 720px;
       margin: 1rem auto 0;
@@ -174,11 +160,6 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <div class="first-pill">
-            <span class="icon" style="margin-right:0.4em;"><i class="fas fa-star"></i></span>
-            The first <strong>temporally consistent</strong> full-body video anonymizer
-          </div>
-
           <h1 class="title is-1 publication-title">
             ReGenHuman: Re-Generating Human Appearances for Realistic Full-Body Video Anonymization
           </h1>
@@ -230,21 +211,61 @@
   </div>
 </section>
 
-<!-- ==================== TEASER ==================== -->
+<!-- ==================== TEASER (FIGURE 1) ==================== -->
 <section class="hero" style="background: #f9f9f9; padding: 0;">
   <div class="container is-max-desktop" style="padding: 2rem 1.5rem;">
-    <figure class="image">
-      <img src="static/images/teaser.jpg" alt="Teaser: comparison of ReGenHuman against baselines" class="teaser-image">
-    </figure>
-    <p class="has-text-centered" style="margin-top: 1rem; color: #555;">
-      Every prior full-body anonymizer works frame by frame&mdash;producing anatomically unrealistic
-      outputs that flicker and drift in identity across time. <strong>ReGenHuman is the first
-      temporally consistent full-body video anonymizer</strong>: it regenerates humans from identity-free
-      structural cues in a single coherent pass, staying realistic across frames while preserving
-      downstream utility.
-    </p>
+    <div class="fig1-layout">
+      <!-- Left: narrative results video -->
+      <div class="fig1-video">
+        <video src="static/videos/figure1.mp4" muted loop autoplay playsinline preload="auto"
+               class="teaser-video"></video>
+        <p class="fig1-cap">
+          Prior anonymizers work frame by frame&mdash;blurring, redacting, or regenerating each frame
+          independently&mdash;so they flicker and drift across time. <strong>ReGenHuman</strong>
+          regenerates the human in a single temporally consistent pass, staying realistic while
+          remaining anonymous by construction.
+        </p>
+      </div>
+      <!-- Right: three-axis tradeoff plot -->
+      <div class="fig1-plot">
+        <figure class="image">
+          <img src="static/images/comparison.png" alt="Privacy-quality-utility tradeoff: ReGenHuman vs. baselines" style="width:100%; border-radius:6px;">
+        </figure>
+        <p class="fig1-cap">
+          Across all three axes a good anonymizer must satisfy&mdash;<strong>privacy</strong>,
+          <strong>quality</strong>, and <strong>utility</strong>&mdash;ReGenHuman (&#9733;) is the
+          only method in the top-right: strongest anonymization, best quality, highest downstream utility.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
+
+<style>
+  .fig1-layout {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+  }
+  .fig1-video { flex: 1.35 1 0; min-width: 0; }
+  .fig1-plot  { flex: 1 1 0; min-width: 0; }
+  .teaser-video {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+    background: #000;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  }
+  .fig1-cap {
+    margin-top: 0.75rem;
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  @media (max-width: 860px) {
+    .fig1-layout { flex-direction: column; gap: 1.5rem; }
+  }
+</style>
 
 <!-- ==================== ABSTRACT ==================== -->
 <section class="section">
@@ -281,19 +302,19 @@
       </div>
       <div class="column">
         <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#129504;</div>
-          <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
+          <div class="axis-icon">&#127916;</div>
+          <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
           <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
+            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
           </p>
         </div>
       </div>
       <div class="column">
         <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#127916;</div>
-          <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
+          <div class="axis-icon">&#129504;</div>
+          <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
           <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
+            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
           </p>
         </div>
       </div>
@@ -342,167 +363,6 @@
   </div>
 </section>
 
-<!-- ==================== HOW IT WORKS (PIPELINE) ==================== -->
-<section class="section" id="pipeline" style="background: #f9f9f9;">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">How It Works</h2>
-    <div class="content has-text-centered">
-      <p>
-        From an input clip we extract <strong>identity-free structural signals</strong>, composite them into
-        one of two conditioning streams, and regenerate the human region from scratch. No original human pixel
-        ever reaches the output.
-      </p>
-    </div>
-
-    <div class="hiw-layout">
-      <!-- Left: the regeneration pipeline (vertical flow) -->
-      <div class="hiw-pipe">
-        <div class="pipe-flow">
-          <!-- Stage 1: input -->
-          <div class="pipe-stage">
-            <div class="pipe-stage-title">Input clip</div>
-            <div class="pipe-item">
-              <video class="pipe-vid" src="static/videos/pipeline/input.mp4" muted loop autoplay playsinline></video>
-            </div>
-          </div>
-
-          <div class="pipe-arrow">&#10142;</div>
-
-          <!-- Stage 2: structural signals -->
-          <div class="pipe-stage">
-            <div class="pipe-stage-title">Structural signals</div>
-            <div class="pipe-item">
-              <video class="pipe-vid" src="static/videos/pipeline/depth.mp4" muted loop autoplay playsinline></video>
-              <div class="pipe-vid-label">Monocular depth</div>
-            </div>
-            <div class="pipe-item">
-              <video class="pipe-vid" src="static/videos/pipeline/pose.mp4" muted loop autoplay playsinline></video>
-              <div class="pipe-vid-label">2D pose (DWPose)</div>
-            </div>
-          </div>
-
-          <div class="pipe-arrow">&#10142;</div>
-
-          <!-- Stage 3: conditioning streams -->
-          <div class="pipe-stage">
-            <div class="pipe-stage-title">Conditioning</div>
-            <div class="pipe-item">
-              <video class="pipe-vid" src="static/videos/pipeline/structall_cond.mp4" muted loop autoplay playsinline></video>
-              <div class="pipe-vid-label">StructAll (synthetic bg)</div>
-            </div>
-            <div class="pipe-item">
-              <video class="pipe-vid" src="static/videos/pipeline/structhuman_cond.mp4" muted loop autoplay playsinline></video>
-              <div class="pipe-vid-label">StructHuman (orig. bg)</div>
-            </div>
-          </div>
-
-          <div class="pipe-arrow">&#10142;</div>
-
-          <!-- Stage 4: regenerated output -->
-          <div class="pipe-stage">
-            <div class="pipe-stage-title">Regenerated output</div>
-            <div class="pipe-item">
-              <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structall_out.mp4" muted loop autoplay playsinline></video>
-              <div class="pipe-vid-label">Ours · StructAll</div>
-            </div>
-            <div class="pipe-item">
-              <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structhuman_out.mp4" muted loop autoplay playsinline></video>
-              <div class="pipe-vid-label">Ours · StructHuman</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: where this lands on the three-axis tradeoff -->
-      <div class="hiw-plot">
-        <figure class="image">
-          <img src="static/images/comparison.png" alt="Privacy-quality-utility tradeoff: ReGenHuman vs. baselines" style="width:100%; border-radius:6px;">
-        </figure>
-        <p class="hiw-plot-cap">
-          The payoff of regenerating instead of editing. Across the
-          <strong>privacy&ndash;quality&ndash;utility</strong> tradeoff, ReGenHuman (&#9733;) is the only
-          method that reaches the top-right: near-zero re-identification attack success
-          <em>and</em> the best generation quality, while keeping downstream VQA utility high (marker color).
-        </p>
-      </div>
-    </div>
-
-    <div class="content has-text-centered" style="margin-top: 1.25rem; color: #888; font-size: 0.85rem;">
-      The diffusion backbone (Wan2.1-VACE + a rank-32 LoRA) inverts the conditioning streams back into a
-      realistic, temporally consistent clip. StructAll anonymizes the whole frame; StructHuman keeps the
-      original background.
-    </div>
-  </div>
-</section>
-
-<style>
-  .pipe-flow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1rem;
-  }
-  .pipe-stage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  .pipe-stage-title {
-    font-family: 'Google Sans', sans-serif;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: #3273dc;
-    text-align: center;
-  }
-  .pipe-item { text-align: center; }
-  .pipe-vid {
-    width: 190px;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    border-radius: 5px;
-    background: #000;
-    display: block;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  }
-  .pipe-vid-ours { box-shadow: 0 0 0 2px #3273dc, 0 2px 6px rgba(0,0,0,0.2); }
-  .pipe-vid-label {
-    font-size: 0.7rem;
-    color: #666;
-    margin-top: 0.2rem;
-  }
-  .pipe-arrow {
-    font-size: 1.7rem;
-    color: #c0c0c0;
-    line-height: 1;
-  }
-  /* How-It-Works two-column layout: vertical pipeline beside the tradeoff plot */
-  .hiw-layout {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 2.5rem;
-    margin-top: 1rem;
-  }
-  .hiw-pipe { flex: 0 0 auto; }
-  .hiw-pipe .pipe-flow { flex-direction: column; gap: 0.5rem; }
-  .hiw-pipe .pipe-arrow { transform: rotate(90deg); }
-  .hiw-pipe .pipe-vid { width: 170px; }
-  .hiw-plot { flex: 1 1 0; min-width: 0; max-width: 560px; }
-  .hiw-plot-cap {
-    margin-top: 0.75rem;
-    color: #555;
-    font-size: 0.9rem;
-    text-align: left;
-  }
-  @media (max-width: 860px) {
-    .hiw-layout { flex-direction: column; gap: 1.5rem; }
-    .hiw-plot { max-width: 100%; }
-    .hiw-plot-cap { text-align: center; }
-  }
-</style>
 
 <!-- ==================== INTERACTIVE COMPARISON ==================== -->
 <section class="section" id="comparison">
@@ -1060,7 +920,7 @@
 
       <div class="contribution-box">
         <strong>A unified three-axis evaluation protocol.</strong>
-        <p style="margin-top: 0.4rem; margin-bottom: 0;">We propose a comprehensive benchmark jointly measuring <span class="eval-badge eval-privacy">Privacy</span> (identity, attribute, background-text leakage, adversarial body re-identification), <span class="eval-badge eval-utility">Utility</span> (action recognition, captioning, HOI preservation), and <span class="eval-badge eval-quality">Quality</span> (VBench- and VBench-2.0-aligned temporal consistency, human anatomy, and aesthetics).</p>
+        <p style="margin-top: 0.4rem; margin-bottom: 0;">We propose a comprehensive benchmark jointly measuring <span class="eval-badge eval-privacy">Privacy</span> (identity, attribute, background-text leakage, adversarial body re-identification), <span class="eval-badge eval-quality">Quality</span> (VBench- and VBench-2.0-aligned temporal consistency, human anatomy, and aesthetics), and <span class="eval-badge eval-utility">Utility</span> (action recognition, captioning, HOI preservation).</p>
       </div>
 
     </div>
