@@ -214,42 +214,42 @@
   <div class="fig1-wrap">
     <div class="fig1-collage">
       <div class="fig1-cell">
-        <video src="static/videos/clip3/gt.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/gt.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">Original</div>
       </div>
       <div class="fig1-cell">
-        <video src="static/videos/clip3/egoblur.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/egoblur.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">EgoBlur</div>
       </div>
       <div class="fig1-cell">
-        <video src="static/videos/clip3/fams.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/fams.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">FAMS</div>
       </div>
       <div class="fig1-cell">
-        <video src="static/videos/clip3/dp2face.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/dp2face.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">DeepPrivacy2 (face)</div>
       </div>
       <div class="fig1-cell">
-        <video src="static/videos/clip3/dp2body.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/dp2body.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">DeepPrivacy2 (body)</div>
       </div>
       <div class="fig1-cell">
-        <video src="static/videos/clip3/fadm.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/fadm.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">FADM</div>
       </div>
       <div class="fig1-cell is-ours">
-        <video src="static/videos/clip3/ours_structhuman.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/ours_structhuman.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">Ours &middot; StructHuman</div>
       </div>
       <div class="fig1-cell is-ours">
-        <video src="static/videos/clip3/ours_structall.mp4" muted loop autoplay playsinline preload="auto"></video>
+        <video src="static/videos/clip1/ours_structall.mp4" muted loop autoplay playsinline preload="auto"></video>
         <div class="fig1-label">Ours &middot; StructAll</div>
       </div>
     </div>
     <p class="fig1-cap">
       The same clip, anonymized eight ways. Pixel and face methods leave the body identifiable;
       prior full-body methods flicker and distort frame to frame.
-      <strong>Ours</strong> (outlined) stays realistic and temporally consistent.
+      <strong>Ours</strong> (outlined) stays realistic and temporally consistent. Note: We provide two versions of our model – <strong>StructHuman</strong>, which preserves the background, and <strong>StructAll</strong>, which anonymizes it.
     </p>
   </div>
 </section>
@@ -296,6 +296,134 @@
     .fig1-collage { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
+<!-- ==================== THREE AXES ==================== -->
+<section class="section" style="background: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">A Good Anonymizer Must Satisfy Three Axes</h2>
+    <div class="columns is-centered" style="margin-top: 1rem;">
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#128274;</div>
+          <h3 class="title is-5 eval-privacy" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Privacy</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            The output must not be re-identifiable by any means&mdash;including through face, body, clothing, and background cues.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#127916;</div>
+          <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#129504;</div>
+          <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABSTRACT ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">The Idea</h2>
+        <div class="content has-text-justified">
+          <p>
+            Human-centric video is everywhere&mdash;and almost always identifiable. To share or train on
+            it safely, we need to anonymize the people in it. But the standard playbook is a dead end:
+            <em>blurring and blacking out</em> people destroys realism and makes the footage useless
+            downstream, while <em>generating each frame independently</em> produces flickering, drifting
+            humans that no longer look real.
+          </p>
+          <p>
+            Our insight is simple: <strong>regenerate, don't edit</strong>. Instead of hiding the original
+            person, we throw their pixels away entirely and <strong>rebuild a brand-new human</strong> from
+            identity-free structural cues&mdash;pose, depth, and segmentation&mdash;using a video diffusion
+            model that denoises the whole clip at once. Because no original human pixel ever reaches the
+            output, privacy is guaranteed <em>by construction</em>, and because the clip is generated jointly,
+            the result is <strong>temporally consistent</strong>.
+          </p>
+          <p>
+            The payoff: <strong>ReGenHuman is the first full-body video anonymizer that is realistic,
+            temporally consistent, and anonymous all at once</strong>&mdash;and it is the only method that
+            wins on privacy, quality, <em>and</em> downstream utility together.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== HOW IT WORKS ==================== -->
+<section class="section" id="method" style="background: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">How It Works</h2>
+    <div class="content has-text-centered">
+      <p>
+        We composite identity-free <strong>pose, depth, and segmentation</strong> into a structural
+        conditioning video, then a video diffusion model (Wan2.1-VACE + a LoRA) regenerates the human
+        from it&mdash;jointly across the whole clip, so the output is temporally consistent.
+      </p>
+    </div>
+
+    <figure class="image" style="margin: 1.25rem 0 2rem;">
+      <img src="static/images/method.jpg" alt="ReGenHuman pipeline architecture" style="width:100%; border-radius:6px;">
+    </figure>
+
+    <div class="hiw-pair">
+      <div class="hiw-item">
+        <video src="static/videos/pipeline/structall_cond.mp4" muted loop autoplay playsinline></video>
+        <div class="hiw-label">Structural conditioning</div>
+      </div>
+      <div class="hiw-arrow">&#10142;</div>
+      <div class="hiw-item">
+        <video src="static/videos/pipeline/structall_out.mp4" muted loop autoplay playsinline class="hiw-ours"></video>
+        <div class="hiw-label">Regenerated human (Ours)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hiw-pair {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+  .hiw-item { text-align: center; }
+  .hiw-item video {
+    width: 380px;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+    background: #000;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+  }
+  .hiw-item video.hiw-ours {
+    box-shadow: 0 0 0 3px #3273dc, 0 3px 10px rgba(0, 0, 0, 0.22);
+  }
+  .hiw-label { margin-top: 0.45rem; font-size: 0.85rem; color: #666; }
+  .hiw-arrow { font-size: 1.8rem; color: #c0c0c0; line-height: 1; }
+  @media (max-width: 760px) {
+    .hiw-pair { flex-direction: column; }
+    .hiw-arrow { transform: rotate(90deg); }
+  }
+</style>
 
 <!-- ==================== INTERACTIVE COMPARISON ==================== -->
 <section class="section" id="comparison">
@@ -323,7 +451,7 @@
 
     <!-- 2x2 grid of synced before/after clips -->
     <div class="cmp-grid">
-      <div class="cmp-cell" data-clip="clip1">
+      <div class="cmp-cell" data-clip="clip5">
         <video class="cmp-ours"  muted loop autoplay playsinline preload="auto"></video>
         <video class="cmp-base"  muted loop autoplay playsinline preload="auto"></video>
         <div class="cmp-divider"><div class="cmp-handle"></div></div>
@@ -623,7 +751,7 @@
 
     <!-- ---------- PRIVACY ---------- -->
     <h3 class="title is-5 has-text-centered" style="margin-top:1.5rem;">
-      <span class="eval-badge eval-privacy">Privacy</span> &mdash; lower is better
+      <span class="eval-badge eval-privacy">Privacy</span>, lower is better
     </h3>
     <div class="table-scroll">
       <table class="metrics">
@@ -665,7 +793,7 @@
 
     <!-- ---------- QUALITY ---------- -->
     <h3 class="title is-5 has-text-centered" style="margin-top:2rem;">
-      <span class="eval-badge eval-quality">Quality</span> &mdash; higher is better
+      <span class="eval-badge eval-quality">Quality</span>, higher is better
     </h3>
     <div class="table-scroll">
       <table class="metrics">
@@ -701,7 +829,7 @@
 
     <!-- ---------- UTILITY ---------- -->
     <h3 class="title is-5 has-text-centered" style="margin-top:2rem;">
-      <span class="eval-badge eval-utility">Utility</span> &mdash; downstream VQA, higher is better
+      <span class="eval-badge eval-utility">Utility</span>, downstream VQA, higher is better
     </h3>
     <div class="table-scroll">
       <table class="metrics">
@@ -802,118 +930,7 @@
   }
 </style>
 
-<!-- ==================== SUPPLEMENTARY VIDEO ==================== -->
-<section class="section" id="supplementary" style="background: #f9f9f9;">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Supplementary Video</h2>
-    <div class="content has-text-centered">
-      <p>
-        Full-sequence comparisons of ReGenHuman against every baseline, side by side.
-      </p>
-    </div>
-
-    <div class="yt-embed">
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID"
-              title="ReGenHuman supplementary video"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen></iframe>
-    </div>
-  </div>
-</section>
-
-<style>
-  .yt-embed {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    aspect-ratio: 16 / 9;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    background: #000;
-  }
-  .yt-embed iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-</style>
-
-<!-- ==================== THREE AXES ==================== -->
-<section class="section" style="background: #f9f9f9;">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">A Good Anonymizer Must Satisfy Three Axes</h2>
-    <div class="columns is-centered" style="margin-top: 1rem;">
-      <div class="column">
-        <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#128274;</div>
-          <h3 class="title is-5 eval-privacy" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Privacy</h3>
-          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            The output must not be re-identifiable by any means&mdash;including through face, body, clothing, and background cues.
-          </p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#127916;</div>
-          <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
-          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
-          </p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#129504;</div>
-          <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
-          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== ABSTRACT ==================== -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">The Idea</h2>
-        <div class="content has-text-justified">
-          <p>
-            Human-centric video is everywhere&mdash;and almost always identifiable. To share or train on
-            it safely, we need to anonymize the people in it. But the standard playbook is a dead end:
-            <em>blurring and blacking out</em> people destroys realism and makes the footage useless
-            downstream, while <em>generating each frame independently</em> produces flickering, drifting
-            humans that no longer look real.
-          </p>
-          <p>
-            Our insight is simple: <strong>regenerate, don't edit</strong>. Instead of hiding the original
-            person, we throw their pixels away entirely and <strong>rebuild a brand-new human</strong> from
-            identity-free structural cues&mdash;pose, depth, and segmentation&mdash;using a video diffusion
-            model that denoises the whole clip at once. Because no original human pixel ever reaches the
-            output, privacy is guaranteed <em>by construction</em>, and because the clip is generated jointly,
-            the result is <strong>temporally consistent</strong>.
-          </p>
-          <p>
-            The payoff: <strong>ReGenHuman is the first full-body video anonymizer that is realistic,
-            temporally consistent, and anonymous all at once</strong>&mdash;and it is the only method that
-            wins on privacy, quality, <em>and</em> downstream utility together.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== CONTRIBUTIONS ==================== -->
+<!-- ==================== CONTRIBUTIONS ====================
 <section class="section">
   <div class="container is-max-desktop">
     <h2 class="title is-3 has-text-centered">Contributions</h2>
@@ -936,13 +953,13 @@
 
     </div>
   </div>
-</section>
+</section> -->
 
 <!-- ==================== BIBTEX ==================== -->
 <section class="section" id="BibTeX" style="background: #f9f9f9;">
   <div class="container is-max-desktop content">
     <h2 class="title is-3">BibTeX</h2>
-    <pre><code>@article{regenthuman2026,
+    <pre><code>@article{regenhuman2026,
   title     = {ReGenHuman: Re-Generating Human Appearances for Realistic
                Full-Body Video Anonymization},
   author    = {Sun, Adam and Barkataki, Eshaan and Milstein, Arnold
