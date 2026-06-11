@@ -215,15 +215,14 @@
 <section class="hero" style="background: #f9f9f9; padding: 0;">
   <div class="container is-max-desktop" style="padding: 2rem 1.5rem;">
     <div class="fig1-layout">
-      <!-- Left: narrative results video -->
+      <!-- Left: synced collage of all methods -->
       <div class="fig1-video">
         <video src="static/videos/figure1.mp4" muted loop autoplay playsinline preload="auto"
                class="teaser-video"></video>
         <p class="fig1-cap">
-          Prior anonymizers work frame by frame&mdash;blurring, redacting, or regenerating each frame
-          independently&mdash;so they flicker and drift across time. <strong>ReGenHuman</strong>
-          regenerates the human in a single temporally consistent pass, staying realistic while
-          remaining anonymous by construction.
+          All eight methods on the same clip, in sync. Pixel and face baselines leave the body
+          identifiable; prior full-body methods flicker frame to frame.
+          <strong>Ours</strong> (green) is realistic and temporally consistent.
         </p>
       </div>
       <!-- Right: three-axis tradeoff plot -->
@@ -232,9 +231,8 @@
           <img src="static/images/comparison.png" alt="Privacy-quality-utility tradeoff: ReGenHuman vs. baselines" style="width:100%; border-radius:6px;">
         </figure>
         <p class="fig1-cap">
-          Across all three axes a good anonymizer must satisfy&mdash;<strong>privacy</strong>,
-          <strong>quality</strong>, and <strong>utility</strong>&mdash;ReGenHuman (&#9733;) is the
-          only method in the top-right: strongest anonymization, best quality, highest downstream utility.
+          <strong>Best on all three axes.</strong> Privacy, quality, and utility&mdash;ReGenHuman
+          (&#9733;) is the only method in the top-right corner.
         </p>
       </div>
     </div>
@@ -247,8 +245,8 @@
     align-items: center;
     gap: 2rem;
   }
-  .fig1-video { flex: 1.35 1 0; min-width: 0; }
-  .fig1-plot  { flex: 1 1 0; min-width: 0; }
+  .fig1-video { flex: 3.25 1 0; min-width: 0; }
+  .fig1-plot  { flex: 1.5 1 0; min-width: 0; }
   .teaser-video {
     width: 100%;
     display: block;
@@ -266,103 +264,6 @@
     .fig1-layout { flex-direction: column; gap: 1.5rem; }
   }
 </style>
-
-<!-- ==================== ABSTRACT ==================== -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <div class="columns is-centered has-text-centered">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Anonymizing human-centric video data is an understudied problem. Prior anonymization techniques either blur or redact pixels at the cost of realism and downstream utility, or generate frame-by-frame at the cost of temporal coherence. We introduce <strong>ReGenHuman</strong>, <strong>the first full-body video anonymization pipeline that is simultaneously realistic, temporally consistent, and anonymous by construction</strong>.
-          </p>
-          <p>
-            Contrary to past approaches which redact or edit the inputs directly, we propose a <em>regenerate, don't edit</em> paradigm. Our approach composites 2D pose, segmentation, and monocular depth into two complementary conditioning streams&mdash;<strong>StructAll</strong> and <strong>StructHuman</strong>&mdash;which are used to fine-tune a video-to-video diffusion backbone on in-the-wild human videos, synthesizing the human regions entirely from identity-free structural cues. We evaluate our model on privacy, quality, and utility, and show that ReGenHuman achieves the best tradeoff across all three axes against current baselines. We further show that our anonymized videos remain effective for downstream tasks, including video question answering.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== THREE AXES ==================== -->
-<section class="section" style="background: #f9f9f9;">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">A Good Anonymizer Must Satisfy Three Axes</h2>
-    <div class="columns is-centered" style="margin-top: 1rem;">
-      <div class="column">
-        <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#128274;</div>
-          <h3 class="title is-5 eval-privacy" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Privacy</h3>
-          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            The output must not be re-identifiable by any means&mdash;including through face, body, clothing, and background cues.
-          </p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#127916;</div>
-          <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
-          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
-          </p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="axis-card has-text-centered">
-          <div class="axis-icon">&#129504;</div>
-          <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
-          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
-            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ==================== METHOD ==================== -->
-<section class="section">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Method</h2>
-
-    <div class="content">
-      <p>
-        ReGenHuman replaces the prevailing <em>edit-or-redact</em> paradigm with a <em>regenerate, don't edit</em> formulation. The human region is entirely resynthesized from scratch, conditioned only on identity-free structural signals, so no original human pixel can reach the output.
-      </p>
-    </div>
-
-    <figure class="image" style="margin: 1.5rem 0;">
-      <img src="static/images/method.jpg" alt="ReGenHuman pipeline diagram" class="method-image">
-    </figure>
-
-    <div class="content" style="margin-top: 1.5rem;">
-      <p>
-        The pipeline has three steps:
-      </p>
-      <ol>
-        <li>
-          <strong>Conditioning extraction.</strong> Per-frame human masks (SAM3), 2D pose skeletons (DWPose), monocular depth (Video Depth Anything), and a clip-level text caption are extracted from the input video using frozen, off-the-shelf models.
-        </li>
-        <li>
-          <strong>Structural conditioning.</strong> The extracted signals are composited into one of two identity-free conditioning videos:
-          <ul style="margin-top: 0.5rem;">
-            <li><strong>StructAll</strong>&mdash;uses depth as the background, yielding a fully anonymized frame with no original pixels anywhere. Suitable when background context must also be protected.</li>
-            <li><strong>StructHuman</strong>&mdash;keeps the original background while graying out human regions, trading whole-frame anonymization for richer scene context. Suitable for settings where the background is not private (e.g., public streets).</li>
-          </ul>
-        </li>
-        <li>
-          <strong>Diffusion-based regeneration.</strong> A rank-32 LoRA trained on Wan2.1-VACE is fine-tuned on in-the-wild human videos to invert the structural conditioning back into a photorealistic clip. The DiT backbone and pretrained Context Adapter weights remain frozen.
-        </li>
-      </ol>
-      <p>
-        Because human-region pixels in the conditioning depend only on pose&mdash;never on the original appearance&mdash;privacy is enforced <em>architecturally</em> rather than empirically.
-      </p>
-    </div>
-  </div>
-</section>
-
 
 <!-- ==================== INTERACTIVE COMPARISON ==================== -->
 <section class="section" id="comparison">
@@ -666,49 +567,6 @@
 })();
 </script>
 
-<!-- ==================== SUPPLEMENTARY VIDEO ==================== -->
-<section class="section" id="supplementary" style="background: #f9f9f9;">
-  <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Supplementary Video</h2>
-    <div class="content has-text-centered">
-      <p>
-        A narrated walkthrough comparing ReGenHuman against every baseline on full sequences&mdash;input,
-        structural conditioning, and regenerated output, side by side.
-      </p>
-    </div>
-
-    <div class="yt-embed">
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID"
-              title="ReGenHuman supplementary video"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allowfullscreen></iframe>
-    </div>
-  </div>
-</section>
-
-<style>
-  .yt-embed {
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    aspect-ratio: 16 / 9;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    background: #000;
-  }
-  .yt-embed iframe {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-  }
-</style>
-
 <!-- ==================== QUANTITATIVE RESULTS ==================== -->
 <section class="section" id="results">
   <div class="container is-max-desktop">
@@ -901,6 +759,103 @@
     text-align: center;
   }
 </style>
+
+<!-- ==================== SUPPLEMENTARY VIDEO ==================== -->
+<section class="section" id="supplementary" style="background: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Supplementary Video</h2>
+    <div class="content has-text-centered">
+      <p>
+        Full-sequence comparisons of ReGenHuman against every baseline, side by side.
+      </p>
+    </div>
+
+    <div class="yt-embed">
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+              title="ReGenHuman supplementary video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<style>
+  .yt-embed {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    background: #000;
+  }
+  .yt-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
+
+<!-- ==================== THREE AXES ==================== -->
+<section class="section" style="background: #f9f9f9;">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">A Good Anonymizer Must Satisfy Three Axes</h2>
+    <div class="columns is-centered" style="margin-top: 1rem;">
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#128274;</div>
+          <h3 class="title is-5 eval-privacy" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Privacy</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            The output must not be re-identifiable by any means&mdash;including through face, body, clothing, and background cues.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#127916;</div>
+          <h3 class="title is-5 eval-quality" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Quality</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            The video must be temporally and geometrically consistent and realistic enough for downstream model training.
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="axis-card has-text-centered">
+          <div class="axis-icon">&#129504;</div>
+          <h3 class="title is-5 eval-utility" style="border-radius:4px; padding:0.2em 0.5em; display:inline-block;">Utility</h3>
+          <p class="content" style="margin-top: 0.75rem; font-size: 0.95rem;">
+            Actions, poses, human&ndash;object interactions, and scene context must remain recognizable for downstream tasks.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==================== ABSTRACT ==================== -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Anonymizing human-centric video data is an understudied problem. Prior anonymization techniques either blur or redact pixels at the cost of realism and downstream utility, or generate frame-by-frame at the cost of temporal coherence. We introduce <strong>ReGenHuman</strong>, <strong>the first full-body video anonymization pipeline that is simultaneously realistic, temporally consistent, and anonymous by construction</strong>.
+          </p>
+          <p>
+            Contrary to past approaches which redact or edit the inputs directly, we propose a <em>regenerate, don't edit</em> paradigm. Our approach composites 2D pose, segmentation, and monocular depth into two complementary conditioning streams&mdash;<strong>StructAll</strong> and <strong>StructHuman</strong>&mdash;which are used to fine-tune a video-to-video diffusion backbone on in-the-wild human videos, synthesizing the human regions entirely from identity-free structural cues. We evaluate our model on privacy, quality, and utility, and show that ReGenHuman achieves the best tradeoff across all three axes against current baselines. We further show that our anonymized videos remain effective for downstream tasks, including video question answering.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ==================== CONTRIBUTIONS ==================== -->
 <section class="section">
