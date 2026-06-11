@@ -315,62 +315,80 @@
       </p>
     </div>
 
-    <div class="pipe-flow">
-      <!-- Stage 1: input -->
-      <div class="pipe-stage">
-        <div class="pipe-stage-title">Input clip</div>
-        <div class="pipe-item">
-          <video class="pipe-vid" src="static/videos/pipeline/input.mp4" muted loop autoplay playsinline></video>
+    <div class="hiw-layout">
+      <!-- Left: the regeneration pipeline (vertical flow) -->
+      <div class="hiw-pipe">
+        <div class="pipe-flow">
+          <!-- Stage 1: input -->
+          <div class="pipe-stage">
+            <div class="pipe-stage-title">Input clip</div>
+            <div class="pipe-item">
+              <video class="pipe-vid" src="static/videos/pipeline/input.mp4" muted loop autoplay playsinline></video>
+            </div>
+          </div>
+
+          <div class="pipe-arrow">&#10142;</div>
+
+          <!-- Stage 2: structural signals -->
+          <div class="pipe-stage">
+            <div class="pipe-stage-title">Structural signals</div>
+            <div class="pipe-item">
+              <video class="pipe-vid" src="static/videos/pipeline/depth.mp4" muted loop autoplay playsinline></video>
+              <div class="pipe-vid-label">Monocular depth</div>
+            </div>
+            <div class="pipe-item">
+              <video class="pipe-vid" src="static/videos/pipeline/pose.mp4" muted loop autoplay playsinline></video>
+              <div class="pipe-vid-label">2D pose (DWPose)</div>
+            </div>
+          </div>
+
+          <div class="pipe-arrow">&#10142;</div>
+
+          <!-- Stage 3: conditioning streams -->
+          <div class="pipe-stage">
+            <div class="pipe-stage-title">Conditioning</div>
+            <div class="pipe-item">
+              <video class="pipe-vid" src="static/videos/pipeline/structall_cond.mp4" muted loop autoplay playsinline></video>
+              <div class="pipe-vid-label">StructAll (synthetic bg)</div>
+            </div>
+            <div class="pipe-item">
+              <video class="pipe-vid" src="static/videos/pipeline/structhuman_cond.mp4" muted loop autoplay playsinline></video>
+              <div class="pipe-vid-label">StructHuman (orig. bg)</div>
+            </div>
+          </div>
+
+          <div class="pipe-arrow">&#10142;</div>
+
+          <!-- Stage 4: regenerated output -->
+          <div class="pipe-stage">
+            <div class="pipe-stage-title">Regenerated output</div>
+            <div class="pipe-item">
+              <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structall_out.mp4" muted loop autoplay playsinline></video>
+              <div class="pipe-vid-label">Ours · StructAll</div>
+            </div>
+            <div class="pipe-item">
+              <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structhuman_out.mp4" muted loop autoplay playsinline></video>
+              <div class="pipe-vid-label">Ours · StructHuman</div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="pipe-arrow">&#10142;</div>
-
-      <!-- Stage 2: structural signals -->
-      <div class="pipe-stage">
-        <div class="pipe-stage-title">Structural signals</div>
-        <div class="pipe-item">
-          <video class="pipe-vid" src="static/videos/pipeline/depth.mp4" muted loop autoplay playsinline></video>
-          <div class="pipe-vid-label">Monocular depth</div>
-        </div>
-        <div class="pipe-item">
-          <video class="pipe-vid" src="static/videos/pipeline/pose.mp4" muted loop autoplay playsinline></video>
-          <div class="pipe-vid-label">2D pose (DWPose)</div>
-        </div>
-      </div>
-
-      <div class="pipe-arrow">&#10142;</div>
-
-      <!-- Stage 3: conditioning streams -->
-      <div class="pipe-stage">
-        <div class="pipe-stage-title">Conditioning</div>
-        <div class="pipe-item">
-          <video class="pipe-vid" src="static/videos/pipeline/structall_cond.mp4" muted loop autoplay playsinline></video>
-          <div class="pipe-vid-label">StructAll (synthetic bg)</div>
-        </div>
-        <div class="pipe-item">
-          <video class="pipe-vid" src="static/videos/pipeline/structhuman_cond.mp4" muted loop autoplay playsinline></video>
-          <div class="pipe-vid-label">StructHuman (orig. bg)</div>
-        </div>
-      </div>
-
-      <div class="pipe-arrow">&#10142;</div>
-
-      <!-- Stage 4: regenerated output -->
-      <div class="pipe-stage">
-        <div class="pipe-stage-title">Regenerated output</div>
-        <div class="pipe-item">
-          <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structall_out.mp4" muted loop autoplay playsinline></video>
-          <div class="pipe-vid-label">Ours · StructAll</div>
-        </div>
-        <div class="pipe-item">
-          <video class="pipe-vid pipe-vid-ours" src="static/videos/pipeline/structhuman_out.mp4" muted loop autoplay playsinline></video>
-          <div class="pipe-vid-label">Ours · StructHuman</div>
-        </div>
+      <!-- Right: where this lands on the three-axis tradeoff -->
+      <div class="hiw-plot">
+        <figure class="image">
+          <img src="static/images/comparison.png" alt="Privacy-quality-utility tradeoff: ReGenHuman vs. baselines" style="width:100%; border-radius:6px;">
+        </figure>
+        <p class="hiw-plot-cap">
+          The payoff of regenerating instead of editing. Across the
+          <strong>privacy&ndash;quality&ndash;utility</strong> tradeoff, ReGenHuman (&#9733;) is the only
+          method that reaches the top-right: near-zero re-identification attack success
+          <em>and</em> the best generation quality, while keeping downstream VQA utility high (marker color).
+        </p>
       </div>
     </div>
 
-    <div class="content has-text-centered" style="margin-top: 1rem; color: #888; font-size: 0.85rem;">
+    <div class="content has-text-centered" style="margin-top: 1.25rem; color: #888; font-size: 0.85rem;">
       The diffusion backbone (Wan2.1-VACE + a rank-32 LoRA) inverts the conditioning streams back into a
       realistic, temporally consistent clip. StructAll anonymizes the whole frame; StructHuman keeps the
       original background.
@@ -421,9 +439,29 @@
     color: #c0c0c0;
     line-height: 1;
   }
-  @media (max-width: 760px) {
-    .pipe-flow { flex-direction: column; }
-    .pipe-arrow { transform: rotate(90deg); }
+  /* How-It-Works two-column layout: vertical pipeline beside the tradeoff plot */
+  .hiw-layout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 1rem;
+  }
+  .hiw-pipe { flex: 0 0 auto; }
+  .hiw-pipe .pipe-flow { flex-direction: column; gap: 0.5rem; }
+  .hiw-pipe .pipe-arrow { transform: rotate(90deg); }
+  .hiw-pipe .pipe-vid { width: 170px; }
+  .hiw-plot { flex: 1 1 0; min-width: 0; max-width: 560px; }
+  .hiw-plot-cap {
+    margin-top: 0.75rem;
+    color: #555;
+    font-size: 0.9rem;
+    text-align: left;
+  }
+  @media (max-width: 860px) {
+    .hiw-layout { flex-direction: column; gap: 1.5rem; }
+    .hiw-plot { max-width: 100%; }
+    .hiw-plot-cap { text-align: center; }
   }
 </style>
 
@@ -729,25 +767,241 @@
 })();
 </script>
 
-<!-- ==================== RESULTS ==================== -->
-<section class="section" style="background: #f9f9f9;">
+<!-- ==================== SUPPLEMENTARY VIDEO ==================== -->
+<section class="section" id="supplementary" style="background: #f9f9f9;">
   <div class="container is-max-desktop">
-    <h2 class="title is-3 has-text-centered">Full Method Comparison</h2>
+    <h2 class="title is-3 has-text-centered">Supplementary Video</h2>
     <div class="content has-text-centered">
       <p>
-        A side-by-side stack of all eight methods on four sequences, playing in sync.
+        A narrated walkthrough comparing ReGenHuman against every baseline on full sequences&mdash;input,
+        structural conditioning, and regenerated output, side by side.
       </p>
     </div>
 
-    <figure class="image" style="margin: 1.5rem 0;">
-      <img src="static/images/collage.jpg" alt="Qualitative comparison against baselines" class="result-image">
-    </figure>
-
-    <div class="content has-text-centered" style="margin-top: 0.5rem; color: #555; font-size: 0.9rem;">
-      Qualitative comparison on 4 randomly sampled examples from the HOIGen-1M test set. EgoBlur, Face Anonymization Made Simple (FAMS), and DeepPrivacy2 (Face) do not anonymize the body. DeepPrivacy2 (Body) and FADM are temporally inconsistent. ReGenHuman produces high-quality, temporally consistent anonymizations for both StructHuman and StructAll modes.
+    <div class="yt-embed">
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID"
+              title="ReGenHuman supplementary video"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen></iframe>
     </div>
   </div>
 </section>
+
+<style>
+  .yt-embed {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    background: #000;
+  }
+  .yt-embed iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
+
+<!-- ==================== QUANTITATIVE RESULTS ==================== -->
+<section class="section" id="results">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
+    <div class="content has-text-centered">
+      <p>
+        ReGenHuman is evaluated on the three axes a good anonymizer must satisfy. In every table,
+        <span class="hl-best">orange</span> marks the best and <span class="hl-snd">blue</span> the
+        second-best per column.
+      </p>
+    </div>
+
+    <!-- ---------- PRIVACY ---------- -->
+    <h3 class="title is-5 has-text-centered" style="margin-top:1.5rem;">
+      <span class="eval-badge eval-privacy">Privacy</span> &mdash; lower is better
+    </h3>
+    <div class="table-scroll">
+      <table class="metrics">
+        <thead>
+          <tr>
+            <th rowspan="2" class="lcol">Method</th>
+            <th colspan="2">Appearance leakage</th>
+            <th colspan="3">Body re-ID: Standard</th>
+            <th colspan="3">Body re-ID: Clothes-Changing</th>
+          </tr>
+          <tr>
+            <th>ID Sim. &darr;</th><th>Text Sim. &darr;</th>
+            <th>R-1 &darr;</th><th>R-5 &darr;</th><th>mAP &darr;</th>
+            <th>R-1 &darr;</th><th>R-5 &darr;</th><th>mAP &darr;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="9">Classical</td></tr>
+          <tr><td class="lcol">EgoBlur (face only)</td><td class="hl-best">0.0014</td><td>0.9263</td><td>100.0</td><td>100.0</td><td>99.9</td><td>86.6</td><td>91.2</td><td>87.2</td></tr>
+          <tr><td class="lcol">Gaussian blur</td><td>0.0148</td><td>0.7694</td><td>50.0</td><td>60.8</td><td>53.3</td><td>40.0</td><td>51.6</td><td>43.3</td></tr>
+          <tr><td class="lcol">Pixelation</td><td class="hl-snd">0.0039</td><td>0.7549</td><td>100.0</td><td>100.0</td><td>99.8</td><td>84.8</td><td>90.6</td><td>85.9</td></tr>
+          <tr><td class="lcol">Blackout</td><td>0.0039</td><td>0.7349</td><td>7.6</td><td>18.4</td><td>14.2</td><td class="hl-snd">17.4</td><td class="hl-snd">29.6</td><td class="hl-snd">20.7</td></tr>
+          <tr class="grp"><td colspan="9">Face-only, generative</td></tr>
+          <tr><td class="lcol">FAMS</td><td>0.0884</td><td>0.8396</td><td>100.0</td><td>100.0</td><td>100.0</td><td>90.8</td><td>92.0</td><td>90.1</td></tr>
+          <tr><td class="lcol">DeepPrivacy2 (face)</td><td>0.0603</td><td>0.9166</td><td>79.1</td><td>87.3</td><td>79.0</td><td>69.4</td><td>79.2</td><td>70.4</td></tr>
+          <tr class="grp"><td colspan="9">Body-only, generative</td></tr>
+          <tr><td class="lcol">DeepPrivacy2 (body)</td><td>0.0309</td><td>0.7404</td><td class="hl-snd">7.0</td><td class="hl-snd">13.3</td><td class="hl-snd">11.3</td><td>29.0</td><td>40.0</td><td>33.7</td></tr>
+          <tr><td class="lcol">FADM</td><td>0.0728</td><td>0.7961</td><td>96.2</td><td>98.7</td><td>96.7</td><td>86.4</td><td>90.4</td><td>85.9</td></tr>
+          <tr class="grp ours"><td colspan="9">Ours (Wan2.1-VACE conditioning)</td></tr>
+          <tr class="ours"><td class="lcol"><strong>StructHuman</strong></td><td>0.0092</td><td class="hl-snd">0.3593</td><td class="hl-best">3.2</td><td class="hl-best">3.2</td><td class="hl-best">4.6</td><td class="hl-best">1.4</td><td class="hl-best">2.0</td><td class="hl-best">2.5</td></tr>
+          <tr class="ours"><td class="lcol"><strong>StructAll</strong></td><td>0.0063</td><td class="hl-best">0.0753</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">
+      Appearance-leakage and body re-identification metrics on HOIGen-1M. For a fair re-ID comparison
+      (which preserves the background), we report only StructHuman.
+    </p>
+
+    <!-- ---------- QUALITY ---------- -->
+    <h3 class="title is-5 has-text-centered" style="margin-top:2rem;">
+      <span class="eval-badge eval-quality">Quality</span> &mdash; higher is better
+    </h3>
+    <div class="table-scroll">
+      <table class="metrics">
+        <thead>
+          <tr>
+            <th class="lcol">Method</th>
+            <th>Subject<br>Consist.</th><th>Backgr.<br>Consist.</th><th>Motion<br>Smooth.</th>
+            <th>Temporal<br>Flicker.</th><th>Overall<br>Consist.</th><th>Human<br>Anatomy</th>
+            <th>Human<br>Identity</th><th>Realism</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="9">Classical</td></tr>
+          <tr><td class="lcol">EgoBlur (face only)</td><td>92.18</td><td>92.54</td><td>96.92</td><td>95.10</td><td>12.43</td><td>83.70</td><td>13.20</td><td>84.00</td></tr>
+          <tr><td class="lcol">Gaussian blur</td><td>92.02</td><td class="hl-snd">92.96</td><td class="hl-snd">97.41</td><td class="hl-snd">95.80</td><td>13.62</td><td>75.30</td><td>14.49</td><td>75.04</td></tr>
+          <tr><td class="lcol">Pixelation</td><td class="hl-best">93.01</td><td class="hl-best">93.32</td><td>96.44</td><td>94.98</td><td>13.14</td><td>70.15</td><td>6.93</td><td>60.92</td></tr>
+          <tr><td class="lcol">Blackout</td><td>92.07</td><td>92.42</td><td class="hl-best">97.43</td><td class="hl-best">95.96</td><td>11.79</td><td>81.13</td><td>7.69</td><td>69.76</td></tr>
+          <tr class="grp"><td colspan="9">Face-only, generative</td></tr>
+          <tr><td class="lcol">FAMS</td><td>90.71</td><td>90.18</td><td>96.61</td><td>94.75</td><td>12.16</td><td>74.31</td><td>8.23</td><td>87.86</td></tr>
+          <tr><td class="lcol">DeepPrivacy2 (face)</td><td>91.67</td><td>91.26</td><td>96.77</td><td>94.88</td><td>11.99</td><td class="hl-snd">87.34</td><td>11.86</td><td>88.45</td></tr>
+          <tr class="grp"><td colspan="9">Body-only, generative</td></tr>
+          <tr><td class="lcol">DeepPrivacy2 (body)</td><td>89.16</td><td>88.76</td><td>95.78</td><td>94.03</td><td>12.06</td><td>76.17</td><td>10.72</td><td>83.74</td></tr>
+          <tr><td class="lcol">FADM</td><td>88.19</td><td>88.48</td><td>95.86</td><td>94.11</td><td>12.02</td><td>83.55</td><td>10.88</td><td>88.00</td></tr>
+          <tr class="grp ours"><td colspan="9">Ours (Wan2.1-VACE conditioning)</td></tr>
+          <tr class="ours"><td class="lcol"><strong>StructHuman</strong></td><td>92.23</td><td>91.52</td><td>97.12</td><td>95.05</td><td class="hl-best">16.36</td><td class="hl-best">89.74</td><td class="hl-best">19.30</td><td class="hl-snd">89.49</td></tr>
+          <tr class="ours"><td class="lcol"><strong>StructAll</strong></td><td class="hl-snd">92.88</td><td>92.35</td><td>96.98</td><td>94.91</td><td class="hl-snd">16.11</td><td>86.85</td><td class="hl-snd">17.35</td><td class="hl-best">89.65</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">
+      VBench / VBench-2.0-aligned quality metrics on HOIGen-1M (all reported as percentages).
+    </p>
+
+    <!-- ---------- UTILITY ---------- -->
+    <h3 class="title is-5 has-text-centered" style="margin-top:2rem;">
+      <span class="eval-badge eval-utility">Utility</span> &mdash; downstream VQA, higher is better
+    </h3>
+    <div class="table-scroll">
+      <table class="metrics">
+        <thead>
+          <tr>
+            <th rowspan="2" class="lcol">Method</th>
+            <th colspan="2">HOIGen (zero-shot)</th>
+            <th colspan="2">NExT-QA (zero-shot)</th>
+            <th colspan="2">MedVideoCap (zero-shot)</th>
+          </tr>
+          <tr>
+            <th>Acc. &uarr;</th><th>&Delta;</th>
+            <th>Acc. &uarr;</th><th>&Delta;</th>
+            <th>Acc. &uarr;</th><th>&Delta;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="grp"><td colspan="7">Original</td></tr>
+          <tr><td class="lcol">Original (upper bound)</td><td>86.40</td><td>&mdash;</td><td>78.31</td><td>&mdash;</td><td>90.47</td><td>&mdash;</td></tr>
+          <tr class="grp"><td colspan="7">Classical</td></tr>
+          <tr><td class="lcol">EgoBlur</td><td class="hl-best">86.90</td><td class="hl-best">+0.50</td><td>77.56</td><td>-0.75</td><td class="hl-best">90.60</td><td class="hl-best">+0.13</td></tr>
+          <tr><td class="lcol">Gaussian blur</td><td>81.33</td><td>-5.07</td><td>72.93</td><td>-5.38</td><td>85.27</td><td>-5.20</td></tr>
+          <tr><td class="lcol">Pixelation</td><td>78.20</td><td>-8.20</td><td>73.76</td><td>-4.55</td><td>85.13</td><td>-5.34</td></tr>
+          <tr><td class="lcol">Blackout</td><td>73.47</td><td>-12.93</td><td>73.00</td><td>-5.31</td><td>74.80</td><td>-15.67</td></tr>
+          <tr class="grp"><td colspan="7">Face-only, generative</td></tr>
+          <tr><td class="lcol">FAMS</td><td class="hl-snd">86.13</td><td class="hl-snd">-0.27</td><td class="hl-best">77.97</td><td class="hl-best">-0.34</td><td>89.60</td><td>-0.87</td></tr>
+          <tr><td class="lcol">DeepPrivacy2 (face)</td><td>85.60</td><td>-0.80</td><td class="hl-snd">77.80</td><td class="hl-snd">-0.51</td><td class="hl-snd">89.80</td><td class="hl-snd">-0.67</td></tr>
+          <tr class="grp"><td colspan="7">Body-only, generative</td></tr>
+          <tr><td class="lcol">DeepPrivacy2 (body)</td><td>73.10</td><td>-13.30</td><td>73.39</td><td>-4.92</td><td>78.07</td><td>-12.40</td></tr>
+          <tr><td class="lcol">FADM</td><td>83.33</td><td>-3.07</td><td>76.49</td><td>-1.82</td><td>86.30</td><td>-4.17</td></tr>
+          <tr class="grp ours"><td colspan="7">Ours (Wan2.1-VACE conditioning)</td></tr>
+          <tr class="ours"><td class="lcol"><strong>StructHuman</strong></td><td>82.37</td><td>-4.03</td><td>75.37</td><td>-2.94</td><td>85.20</td><td>-5.27</td></tr>
+          <tr class="ours"><td class="lcol"><strong>StructAll</strong></td><td>81.80</td><td>-4.60</td><td>75.85</td><td>-2.46</td><td>84.67</td><td>-5.80</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-note">
+      Zero-shot Video Question Answering accuracy with a frozen Qwen3-VL-8B on anonymized clips.
+      &Delta; is relative to the un-anonymized upper bound (top row), which is excluded from the ranking.
+      Unlike redaction baselines that collapse on body-centric content, our regenerated humans keep VQA
+      utility close to the upper bound while being the only method that is anonymous by construction.
+    </p>
+  </div>
+</section>
+
+<style>
+  .table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0.5rem 0;
+  }
+  table.metrics {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 640px;
+    font-size: 0.82rem;
+    background: #fff;
+  }
+  table.metrics th, table.metrics td {
+    padding: 0.32em 0.55em;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+  }
+  table.metrics thead th {
+    font-family: 'Google Sans', sans-serif;
+    font-weight: 600;
+    color: #444;
+    border-bottom: 1px solid #ccc;
+    background: #fafafa;
+  }
+  table.metrics td.lcol, table.metrics th.lcol {
+    text-align: left;
+    position: sticky;
+    left: 0;
+    background: #fff;
+    z-index: 1;
+  }
+  table.metrics thead th.lcol { background: #fafafa; }
+  table.metrics tr.grp td {
+    text-align: left;
+    font-style: italic;
+    color: #777;
+    background: #f7f7f7;
+    font-size: 0.78rem;
+  }
+  table.metrics tr.ours td { background: #f4f8ff; }
+  table.metrics tr.ours td.lcol { background: #f4f8ff; }
+  table.metrics tr.grp.ours td { background: #e9f1ff; color: #3273dc; font-weight: 600; }
+  .hl-best { background: rgb(254,224,182) !important; font-weight: 600; }
+  .hl-snd  { background: rgb(209,229,240) !important; }
+  span.hl-best, span.hl-snd { padding: 0.05em 0.4em; border-radius: 3px; font-weight: 600; }
+  .table-note {
+    font-size: 0.82rem;
+    color: #888;
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+</style>
 
 <!-- ==================== CONTRIBUTIONS ==================== -->
 <section class="section">
