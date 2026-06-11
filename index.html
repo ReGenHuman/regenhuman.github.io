@@ -1025,6 +1025,30 @@
       if (target) target.classList.toggle('is-active');
     });
   });
+
+  // Force-play autoplaying videos (browsers often reject autoplay when many
+  // load at once). Retry on load and start them when scrolled into view.
+  (function () {
+    var vids = Array.prototype.slice.call(
+      document.querySelectorAll('video[autoplay]'));
+    function tryPlay(v) {
+      var p = v.play();
+      if (p && p.catch) p.catch(function () {});
+    }
+    vids.forEach(function (v) {
+      v.muted = true;
+      v.addEventListener('loadeddata', function () { tryPlay(v); });
+      tryPlay(v);
+    });
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) tryPlay(e.target);
+        });
+      }, { threshold: 0.1 });
+      vids.forEach(function (v) { io.observe(v); });
+    }
+  })();
 </script>
 
 </body>
